@@ -106,5 +106,8 @@ pub fn split_lines(vec: Vec<u8>, line_width: u8) -> Vec<Vec<u8>> {
         }
         counter += 1;
     }
+    if !tmp_buf.is_empty(){
+        vec_new.push(tmp_buf);
+    }
     vec_new
 }
