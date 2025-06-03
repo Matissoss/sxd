@@ -44,8 +44,8 @@ $BIN [FLAG(s)]
 - -c        ; prints characters in color using ANSI escape codes
 - -h        ; prints this message
 - -v        ; prints version
-- -lw=[VAL] ; specifies line width used in hex dump
-"
+- -e        ; makes program not exit with code != 0 - used by --diff
+- -lw=[VAL] ; specifies line width used in hex dump, default = 16"
 )
 }
 fn version(){

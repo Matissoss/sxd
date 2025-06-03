@@ -4,16 +4,7 @@
 // licensed under MPL 2.0
 
 #[repr(transparent)]
-#[derive(Clone, Copy, PartialEq, Eq)]
-pub struct BoolTable8 {
-    data: u8,
-}
-
-impl Default for BoolTable8 {
-    fn default() -> Self {
-        Self::new()
-    }
-}
+pub struct BoolTable8 { data: u8 }
 
 impl BoolTable8 {
     pub fn new() -> Self {

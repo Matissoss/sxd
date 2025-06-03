@@ -4,11 +4,13 @@
 
 ## about
 
-`sxd` (Simple Hex Dump) is CLI tool for hex dumping. Inspired by `xxd`, made for usage in `rasm` assembler.
+`sxd` is CLI tool for hex dump. Made for usage in `rasm` assembler, to replace `xxd`.
+
+It is very tiny (<300LOC), but powerful enough for usage (can diff two buffers, hex dump with color).
 
 ## usage
 
-use `-h` flag
+use `-h` flag.
 
 ## credits
 

@@ -3,16 +3,13 @@
 // made by matissoss
 // licensed under MPL 2.0
 
-use std::fs;
+use std::{
+    fs,
+    path::PathBuf
+};
 
 use crate::color;
-
-use crate::config::{
-    DIFF_FLAG,
-    COLOR_FLAG,
-    CHAR_FLAG,
-    Config
-};
+use crate::config::*;
 
 pub fn hex_dump(conf: Config) {
     if conf.get_flag(DIFF_FLAG) {
@@ -20,18 +17,7 @@ pub fn hex_dump(conf: Config) {
         return;
     }
 
-    let path = conf.path_1();
-    
-    if path.is_none() {
-        panic!("You tried to do hex dump without giving any path :)");
-    }
-    let path = path.unwrap();
-    if !path.exists(){
-        panic!("File you tried to access, doesn't exist!");
-    }
-    let buf = fs::read(path).expect("Error occured, while trying to read file!");
-    
-    let lines = split_lines(buf, conf.line_width());
+    let lines = get_content(conf.path_1(), conf.line_width());
 
     let mut address : u64 = 0x0;
     let use_color = conf.get_flag(COLOR_FLAG);
@@ -55,43 +41,24 @@ pub fn hex_dump(conf: Config) {
                 , use_color);
             }
         }
-        print!("\n");
+        println!();
         address += line_width_u64;
     }
 }
 
 pub fn diff(conf: Config) {
-    let path = conf.path_1();
-    
-    if path.is_none() {
-        panic!("You tried to do hex dump without giving any path :)");
-    }
-    let path = path.unwrap();
-    if !path.exists(){
-        panic!("File you tried to access, doesn't exist!");
-    }
-    let buf = fs::read(path).expect("Error occured, while trying to read file!");
-    
-    let lines_1 = split_lines(buf, conf.line_width());
-    
-    let path = conf.path_2();
-    
-    if path.is_none() {
-        panic!("You tried to do hex dump without giving any path :)");
-    }
-    let path = path.unwrap();
-    if !path.exists(){
-        panic!("File you tried to access, doesn't exist!");
-    }
-    let buf = fs::read(path).expect("Error occured, while trying to read file!");
-    
-    let lines_2 = split_lines(buf, conf.line_width());
+    let lines_1 = get_content(conf.path_1(), conf.line_width());
+    let lines_2 = get_content(conf.path_2(), conf.line_width());
 
     let color_bool = conf.get_flag(COLOR_FLAG);
     let line_width_u64 = conf.line_width() as u64;
     if lines_1.len() != lines_2.len() {
         print!("Files differ in length!");
-        std::process::exit(1);
+        if conf.get_flag(LEAVE_ERROR){
+            std::process::exit(0);
+        } else {
+            std::process::exit(1);
+        }
     }
     for idx in 0..lines_1.len() {
         if lines_1[idx] != lines_2[idx] {
@@ -108,6 +75,19 @@ pub fn diff(conf: Config) {
             }
         }
     }
+}
+
+fn get_content(path: Option<&PathBuf>, lw: u8) -> Vec<Vec<u8>> {
+    if path.is_none() {
+        panic!("You tried to do hex dump without giving any path :)");
+    }
+    let path = path.unwrap();
+    if !path.exists(){
+        panic!("File you tried to access, doesn't exist!");
+    }
+    let buf = fs::read(path).expect("Error occured, while trying to read file!");
+    
+    split_lines(buf, lw)
 }
 
 pub fn split_lines(vec: Vec<u8>, line_width: u8) -> Vec<Vec<u8>> {
