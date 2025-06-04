@@ -24,10 +24,10 @@ pub fn hex_dump(conf: Config) {
     let char_flag = conf.get_flag(CHAR_FLAG);
     let line_width_u64 = conf.line_width() as u64;
     for l in lines {
-        print!("{:08x}: ", address);
+        print!("{:08x}:", address);
         for b in &l {
-            crate::color::print_byte(*b, use_color);
             print!(" ");
+            crate::color::print_byte(*b, use_color);
         }
         if char_flag {
             print!(" ; ");
