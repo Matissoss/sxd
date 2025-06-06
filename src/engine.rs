@@ -63,7 +63,7 @@ pub fn diff(conf: Config) {
     for idx in 0..lines_1.len() {
         if lines_1[idx] != lines_2[idx] {
             let address = idx as u64 * line_width_u64;
-            print!("{:08x}:", address);
+            print!("\n{:08x}:", address);
             for b in &lines_1[idx] {
                 print!(" ");
                 color::print_byte(*b, color_bool);
