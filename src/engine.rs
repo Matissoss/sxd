@@ -30,7 +30,7 @@ pub fn hex_dump(conf: Config) {
             crate::color::print_byte(*b, use_color);
         }
         if char_flag {
-            print!(" ; ");
+            print!("{} ; ", " ".repeat(((line_width_u64 as usize) - l.len()) * 3));
             for b in l {
                 color::print_char(
                 if b.is_ascii_alphanumeric() {
@@ -68,7 +68,7 @@ pub fn diff(conf: Config) {
                 print!(" ");
                 color::print_byte(*b, color_bool);
             }
-            print!(" ; ");
+            print!("\n{}", " ".repeat(10));
             for b in &lines_2[idx] {
                 color::print_byte(*b, color_bool);
                 print!(" ");
