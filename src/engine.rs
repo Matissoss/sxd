@@ -103,7 +103,7 @@ pub fn split_lines(vec: Vec<u8>, line_width: u8) -> Vec<Vec<u8>> {
             vec_new.push(tmp_buf);
             tmp_buf = Vec::with_capacity(usize_line);
             tmp_buf.push(b);
-            counter = 1;
+            counter = 0;
         }
         counter += 1;
     }
