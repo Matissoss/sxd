@@ -52,14 +52,6 @@ pub fn diff(conf: Config) {
 
     let color_bool = conf.get_flag(COLOR_FLAG);
     let line_width_u64 = conf.line_width() as u64;
-    if lines_1.len() != lines_2.len() {
-        print!("Files differ in length!");
-        if conf.get_flag(LEAVE_ERROR){
-            std::process::exit(0);
-        } else {
-            std::process::exit(1);
-        }
-    }
     for idx in 0..lines_1.len() {
         if lines_1[idx] != lines_2[idx] {
             let address = idx as u64 * line_width_u64;
@@ -79,7 +71,7 @@ pub fn diff(conf: Config) {
 
 fn get_content(path: Option<&PathBuf>, lw: u8) -> Vec<Vec<u8>> {
     if path.is_none() {
-        panic!("You tried to do hex dump without giving any path :)");
+        panic!("You tried to do hex dump without giving required paths!");
     }
     let path = path.unwrap();
     if !path.exists(){
@@ -95,17 +87,15 @@ pub fn split_lines(vec: Vec<u8>, line_width: u8) -> Vec<Vec<u8>> {
     let mut vec_new = Vec::new();
 
     let mut tmp_buf = Vec::with_capacity(usize_line);
-    let mut counter = 1;
+    let mut counter = 0;
     for b in vec {
-        if counter <= usize_line {
-            tmp_buf.push(b);
-        } else {
+        if counter > usize_line - 1 {
             vec_new.push(tmp_buf);
             tmp_buf = Vec::with_capacity(usize_line);
-            tmp_buf.push(b);
             counter = 0;
         }
         counter += 1;
+        tmp_buf.push(b);
     }
     if !tmp_buf.is_empty(){
         vec_new.push(tmp_buf);

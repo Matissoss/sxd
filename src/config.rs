@@ -12,7 +12,6 @@ pub const COLOR_FLAG    : u8 = 0x1;
 pub const HELP_FLAG     : u8 = 0x2;
 pub const VERSION_FLAG  : u8 = 0x3;
 pub const CHAR_FLAG     : u8 = 0x4;
-pub const LEAVE_ERROR   : u8 = 0x5;
 
 pub struct Config{
     paths: [PathBuf; 2],
@@ -93,7 +92,6 @@ fn parse_args(args: Vec<String>) -> Config {
                 "-h" => config.set_flag(HELP_FLAG),
                 "-c" => config.set_flag(COLOR_FLAG),
                 "-C" => config.set_flag(CHAR_FLAG),
-                "-u" => config.set_flag(LEAVE_ERROR),
                 _ => {}
             }
         }
