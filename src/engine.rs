@@ -52,7 +52,7 @@ pub fn diff(conf: Config) {
 
     let color_bool = conf.get_flag(COLOR_FLAG);
     let line_width_u64 = conf.line_width() as u64;
-    for idx in 0..lines_1.len() {
+    for idx in 0..lines_1.len().min(lines_2.len()) {
         if lines_1[idx] != lines_2[idx] {
             let address = idx as u64 * line_width_u64;
             print!("\n{:08x}:", address);

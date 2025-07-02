@@ -41,7 +41,7 @@ fn panic_handler(panic: &std::panic::PanicHookInfo){
 
 fn help(){
     println!(
-"sxd - simple hex dump v25-06-alpha0
+"sxd - simple hex dump v25-06-alpha1
 ---------------------
 made by matissoss
 licensed under MPL 2.0
@@ -62,6 +62,6 @@ $BIN [FLAG(s)]
 }
 fn version(){
     println!(
-"sxd - 25-06-alpha0"
+"sxd - 25-06-alpha1"
 )
 }
