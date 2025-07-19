@@ -3,15 +3,14 @@
 // made by matissoss
 // licensed under MPL 2.0
 
-use std::{
-    env,
-    process
-};
+#![allow(clippy::new_without_default)]
 
-pub mod engine;
+use std::{env, process};
+
 pub mod booltable;
-pub mod config;
 pub mod color;
+pub mod config;
+pub mod engine;
 
 fn main() {
     std::panic::set_hook(Box::new(panic_handler));
@@ -27,8 +26,8 @@ fn main() {
     engine::hex_dump(conf);
 }
 
-fn panic_handler(panic: &std::panic::PanicHookInfo){
-    let ctt : &str = if let Some(str) = panic.payload().downcast_ref::<&str>() {
+fn panic_handler(panic: &std::panic::PanicHookInfo) {
+    let ctt: &str = if let Some(str) = panic.payload().downcast_ref::<&str>() {
         str
     } else if let Some(str) = panic.payload().downcast_ref::<String>() {
         str
@@ -39,29 +38,27 @@ fn panic_handler(panic: &std::panic::PanicHookInfo){
     std::process::exit(1);
 }
 
-fn help(){
+fn help() {
     println!(
-"sxd - simple hex dump v25-06-alpha1
+        "sxd - simple hex dump v25-06-alpha1
 ---------------------
 made by matissoss
 licensed under MPL 2.0
 ---
 USAGE:
-$BIN [FLAG(s)]
+<BIN> [FLAGS]
 ---
-[FLAG(s)]:
-- -1=[PATH] ; file 1
-- -2=[PATH] ; file 2 - used with --diff
-- --diff    ; compares two files
-- -C        ; print characters beside hex dump (n)
-- -c        ; prints characters in color using ANSI escape codes
-- -h        ; prints this message
-- -v        ; prints version
-- -lw=[VAL] ; specifies line width used in hex dump, default = 16"
-)
+[FLAGS]:
+- -1=[PATH]     ; file 1
+- -2=[PATH]     ; file 2 - used with --diff
+- --diff        ; compares two files
+- -C            ; print characters beside hex dump (n)
+- -c            ; prints characters in color using ANSI escape codes
+- -h/--help     ; prints this message
+- -v/--version  ; prints version
+- -lw=[VAL]     ; specifies line width used in hex dump, default = 16"
+    )
 }
-fn version(){
-    println!(
-"sxd - 25-06-alpha1"
-)
+fn version() {
+    println!("sxd - 25-06-alpha1")
 }

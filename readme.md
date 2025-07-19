@@ -6,7 +6,7 @@
 
 `sxd` is CLI tool for hex dump. Made for usage in `pasm` assembler and as part of [polon](https://github.com/Matissoss/polon), to replace `xxd`.
 
-It is very tiny (<300LOC), but powerful enough for usage (can diff two buffers, hex dump with color).
+It is very tiny (320LOC), but powerful enough for usage (can diff two buffers, hex dump with color).
 
 ## usage
 

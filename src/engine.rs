@@ -3,10 +3,7 @@
 // made by matissoss
 // licensed under MPL 2.0
 
-use std::{
-    fs,
-    path::PathBuf
-};
+use std::{fs, path::PathBuf};
 
 use crate::color;
 use crate::config::*;
@@ -19,26 +16,30 @@ pub fn hex_dump(conf: Config) {
 
     let lines = get_content(conf.path_1(), conf.line_width());
 
-    let mut address : u64 = 0x0;
+    let mut address: u64 = 0x0;
     let use_color = conf.get_flag(COLOR_FLAG);
     let char_flag = conf.get_flag(CHAR_FLAG);
     let line_width_u64 = conf.line_width() as u64;
     for l in lines {
-        print!("{:08x}:", address);
+        print!("{address:08x}:");
         for b in &l {
             print!(" ");
             crate::color::print_byte(*b, use_color);
         }
         if char_flag {
-            print!("{} ; ", " ".repeat(((line_width_u64 as usize) - l.len()) * 3));
+            print!(
+                "{} ; ",
+                " ".repeat(((line_width_u64 as usize) - l.len()) * 3)
+            );
             for b in l {
                 color::print_char(
-                if b.is_ascii_alphanumeric() {
-                    b as char
-                } else {
-                    '.'
-                }
-                , use_color);
+                    if b.is_ascii_alphanumeric() {
+                        b as char
+                    } else {
+                        '.'
+                    },
+                    use_color,
+                );
             }
         }
         println!();
@@ -55,7 +56,7 @@ pub fn diff(conf: Config) {
     for idx in 0..lines_1.len().min(lines_2.len()) {
         if lines_1[idx] != lines_2[idx] {
             let address = idx as u64 * line_width_u64;
-            print!("\n{:08x}:", address);
+            print!("{:08x}:", address);
             for b in &lines_1[idx] {
                 print!(" ");
                 color::print_byte(*b, color_bool);
@@ -65,6 +66,7 @@ pub fn diff(conf: Config) {
                 color::print_byte(*b, color_bool);
                 print!(" ");
             }
+            println!();
         }
     }
 }
@@ -74,11 +76,11 @@ fn get_content(path: Option<&PathBuf>, lw: u8) -> Vec<Vec<u8>> {
         panic!("You tried to do hex dump without giving required paths!");
     }
     let path = path.unwrap();
-    if !path.exists(){
+    if !path.exists() {
         panic!("File you tried to access, doesn't exist!");
     }
     let buf = fs::read(path).expect("Error occured, while trying to read file!");
-    
+
     split_lines(buf, lw)
 }
 
@@ -97,7 +99,7 @@ pub fn split_lines(vec: Vec<u8>, line_width: u8) -> Vec<Vec<u8>> {
         counter += 1;
         tmp_buf.push(b);
     }
-    if !tmp_buf.is_empty(){
+    if !tmp_buf.is_empty() {
         vec_new.push(tmp_buf);
     }
     vec_new

@@ -7,13 +7,14 @@ use std::path::PathBuf;
 
 use crate::booltable::BoolTable8;
 
-pub const DIFF_FLAG     : u8 = 0x0;
-pub const COLOR_FLAG    : u8 = 0x1;
-pub const HELP_FLAG     : u8 = 0x2;
-pub const VERSION_FLAG  : u8 = 0x3;
-pub const CHAR_FLAG     : u8 = 0x4;
+pub const DIFF_FLAG: u8 = 0x0;
+pub const COLOR_FLAG: u8 = 0x1;
+pub const HELP_FLAG: u8 = 0x2;
+pub const VERSION_FLAG: u8 = 0x3;
+pub const CHAR_FLAG: u8 = 0x4;
 
-pub struct Config{
+#[derive(Debug)]
+pub struct Config {
     paths: [PathBuf; 2],
     line_width: u8,
     flags: BoolTable8,
@@ -27,7 +28,7 @@ impl Config {
         Self {
             paths: [PathBuf::new(), PathBuf::new()],
             flags: BoolTable8::new(),
-            line_width: 16
+            line_width: 16,
         }
     }
     pub fn line_width(&self) -> u8 {
@@ -70,16 +71,17 @@ impl Config {
 fn parse_args(args: Vec<String>) -> Config {
     let mut config = Config::new();
 
-    for arg in args {
+    let mut pidx = 0;
+    for arg in &args[1..] {
         if let Some((key, val)) = arg.split_once('=') {
             match key {
                 "-1" => {
                     let _ = config.set_path(0, PathBuf::from(val));
-                },
+                }
                 "-2" => {
                     config.set_flag(DIFF_FLAG);
                     let _ = config.set_path(1, PathBuf::from(val));
-                },
+                }
                 "-lw" => {
                     config.line_width = val.parse().unwrap_or(16);
                 }
@@ -88,11 +90,16 @@ fn parse_args(args: Vec<String>) -> Config {
         } else {
             match arg.as_str() {
                 "--diff" => config.set_flag(DIFF_FLAG),
-                "-v" => config.set_flag(VERSION_FLAG),
-                "-h" => config.set_flag(HELP_FLAG),
+                "-v" | "--version" => config.set_flag(VERSION_FLAG),
+                "-h" | "--help" => config.set_flag(HELP_FLAG),
                 "-c" => config.set_flag(COLOR_FLAG),
                 "-C" => config.set_flag(CHAR_FLAG),
-                _ => {}
+                _ => {
+                    if !config.set_path(pidx, arg.into()) {
+                        panic!("you provided too many files!");
+                    }
+                    pidx += 1;
+                }
             }
         }
     }

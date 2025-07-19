@@ -4,7 +4,10 @@
 // licensed under MPL 2.0
 
 #[repr(transparent)]
-pub struct BoolTable8 { data: u8 }
+#[derive(Debug)]
+pub struct BoolTable8 {
+    data: u8,
+}
 
 impl BoolTable8 {
     pub fn new() -> Self {
